@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Disease Database | NurseHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+     <div class="logo">
+        <a href="index.html" style="text-decoration: none; color: inherit;">NurseHub</a>
+    </div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="diseases.html">Diseases</a></li>
+        <li><a href="tools.html">Clinical Tools</a></li> <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<header class="search-header">
+    <h1>Clinical Disease Database</h1>
+    <p>Select a condition to view detailed nursing management notes.</p>
+    <input type="text" id="diseaseSearch" class="search-bar" placeholder="Search by name..." onkeyup="filterDiseases()">
+    <div id="loader"></div> 
+</header>
+
+<div class="container"> 
+    <main>
+        <div class="card">
+            <h2>A-Z Index</h2>
+            
+            <div id="alphabetButtons" class="alphabet-filter" style="margin-bottom: 20px; display: flex; gap: 5px; flex-wrap: wrap;">
+            </div>
+
+           <ul id="diseaseList" style="list-style: none; padding: 0;">
+    <li data-letter="A" style="margin-bottom: 10px;">
+        <a href="asthma.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">Asthma</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Respiratory: Airway inflammation and bronchospasm.</p>
+    </li>
+    <hr>
+
+    <li data-letter="C" style="margin-bottom: 10px;">
+        <a href="copd.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">COPD</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Respiratory: Chronic airflow obstruction (Emphysema/Bronchitis).</p>
+    </li>
+    <hr>
+
+    <li data-letter="D" style="margin-bottom: 10px;">
+        <a href="diabetes-insipidus.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">Diabetes Insipidus (DI)</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Endocrine: ADH deficiency and extreme polyuria.</p>
+    </li>
+    <hr>
+
+    <li data-letter="D" style="margin-bottom: 10px;">
+        <a href="diabetes-mellitus.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">Diabetes Mellitus (DM)</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Endocrine: Glucose metabolism and insulin issues.</p>
+    </li>
+    <hr>
+
+    <li data-letter="H" style="margin-bottom: 10px;">
+        <a href="heart-failure.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">Heart Failure (CHF)</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Cardiovascular: Pump failure and systemic/pulmonary congestion.</p>
+    </li>
+    <hr>
+
+    <li data-letter="H" style="margin-bottom: 10px;">
+        <a href="hypertension.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">Hypertension (HTN)</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Cardiovascular: Persistent high blood pressure.</p>
+    </li>
+    <hr>
+
+    <li data-letter="S" style="margin-bottom: 10px;">
+        <a href="stroke.html" style="text-decoration: none; color: var(--primary); font-size: 1.2rem; font-weight: bold;">Stroke (CVA)</a>
+        <p style="margin: 0; font-size: 0.9rem; color: #666;">Neurological: Acute brain attack.</p>
+    </li>
+</ul>
+        </div>
+    </main>
+
+    <aside>
+        <div class="card" style="border-top-color: var(--primary);">
+            <h3>Standard Lab Ranges</h3>
+            <table class="clinical-table" style="font-size: 0.9rem;">
+                <tr><td><strong>pH:</strong></td><td>7.35 - 7.45</td></tr>
+                <tr><td><strong>PaCO2:</strong></td><td>35 - 45 mmHg</td></tr>
+                <tr><td><strong>HCO3:</strong></td><td>22 - 26 mEq/L</td></tr>
+                <tr><td><strong>Potassium:</strong></td><td>3.5 - 5.0 mEq/L</td></tr>
+                <tr><td><strong>Sodium:</strong></td><td>135 - 145 mEq/L</td></tr>
+            </table>
+            <p style="font-size: 0.75rem; color: #666;">*Essential values for Level 300 clinical rotations.</p>
+        </div>
+
+        <div class="card" style="border-top-color: var(--secondary);">
+            <h3>Clinical Tip</h3>
+            
+            <p style="font-size: 0.9rem;">Remember the <strong>6 Rights</strong> of Medication Administration before treating any of these conditions!</p>
+        </div>
+    </aside>
+</div>
+
+<footer style="margin-top: 50px; padding: 40px 0; background: white; border-top: 1px solid #ddd; text-align: center;">
+    <div class="container" style="display: block;">
+        <p style="font-weight: bold; color: var(--primary); margin-bottom: 20px;">NurseHub | Dedicated to Clinical Excellence</p>
+        
+        <div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; font-size: 0.9rem;">
+            <a href="https://www.instagram.com/obeddank12?igsh=eWZqeG5hMHN2YzJj&utm_source=qr" target="_blank" style="text-decoration: none; color: #475569;">Instagram</a>
+            <a href="https://wa.link/hkzs76" target="_blank" style="text-decoration: none; color: #475569;">WhatsApp</a>
+            <a href="https://www.facebook.com/share/1AokoTn6rH/?mibextid=wwXIfr" target="_blank" style="text-decoration: none; color: #475569;">Facebook</a>
+            <a href="https://www.tiktok.com/@obeddank12?_r=1&_t=ZM-92RnTgrx2jc" target="_blank" style="text-decoration: none; color: #475569;">TikTok</a>
+        </div>
+
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">&copy; 2025 Dankwah Obed Asante. All rights reserved.</p>
+        
+        <div id="alphabetButtonsBottom" class="alphabet-filter" style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;"></div>
+    </div>
+</footer>
+<script src="script.js"></script>
+
+</body>
+</html>

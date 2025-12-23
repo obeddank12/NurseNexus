@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clinical Study: Hypertension | NurseHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="navbar">
+     <div class="logo">
+        <a href="index.html" style="text-decoration: none; color: inherit;">NurseHub</a>
+    </div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="diseases.html">Diseases</a></li>
+        <li><a href="tools.html">Tools</a></li>
+        <li><a href="about.html">About</a></li>
+    </ul>
+</nav>
+
+<header>
+    <h1>Hypertension (HTN)</h1>
+    <p>The "Silent Killer": Classification, Pathophysiology, and Management</p>
+</header>
+
+<div class="container">
+    <main>
+        <div class="card" style="padding: 15px; margin-bottom: 25px; border-top: none; border-bottom: 3px solid var(--secondary);">
+            <p style="margin: 0 0 10px 0; font-size: 0.8rem; font-weight: bold; color: var(--primary);">QUICK NAV:</p>
+            <div id="alphabetButtons" class="alphabet-filter" style="display: flex; gap: 5px; flex-wrap: wrap;"></div>
+        </div>
+
+        <section class="card">
+            <h2>1. ACC/AHA Blood Pressure Classifications</h2>
+            <p>Hypertension is defined as a persistent systolic blood pressure (SBP) of 130 mmHg or more, or a diastolic blood pressure (DBP) of 80 mmHg or more.</p>
+            
+            
+
+            <table class="clinical-table" style="font-size: 0.9rem; width: 100%; margin-top:15px;">
+                <thead style="background: #f8fafc;">
+                    <tr>
+                        <th>Category</th>
+                        <th>Systolic (mmHg)</th>
+                        <th>Diastolic (mmHg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Normal</strong></td><td>< 120</td><td>AND < 80</td></tr>
+                    <tr style="background: #fffbeb;"><td><strong>Elevated</strong></td><td>120 - 129</td><td>AND < 80</td></tr>
+                    <tr style="background: #fff7ed;"><td><strong>Stage 1 HTN</strong></td><td>130 - 139</td><td>OR 80 - 89</td></tr>
+                    <tr style="background: #fff1f2;"><td><strong>Stage 2 HTN</strong></td><td>&ge; 140</td><td>OR &ge; 90</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="card" style="border-top-color: #10b981;">
+            <h2>2. Target Organ Damage (TOD)</h2>
+            <p>Chronic high pressure damages the endothelial lining of small and large vessels, leading to complications in four primary areas:</p>
+            
+            [Image showing complications of hypertension: Stroke, Retinopathy, Heart Attack, and Kidney Failure]
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
+                <div>
+                    <h4>Cardiac & Vascular</h4>
+                    <ul>
+                        <li><strong>LVH:</strong> Left Ventricular Hypertrophy (heart works too hard).</li>
+                        <li><strong>HF:</strong> Heart Failure.</li>
+                        <li><strong>PVD:</strong> Peripheral Vascular Disease.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Neuro, Renal & Retinal</h4>
+                    <ul>
+                        <li><strong>CVA:</strong> Stroke/TIA risk increases significantly.</li>
+                        <li><strong>Nephropathy:</strong> Chronic Kidney Disease (check Creatinine).</li>
+                        <li><strong>Retinopathy:</strong> Retinal damage and vision loss.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="card" style="border-top-color: #3b82f6;">
+            <h2>3. Pharmacology: The "Big Three"</h2>
+            <table class="clinical-table" style="font-size: 0.85rem; width: 100%;">
+                <tr style="background: #f8fafc;">
+                    <th>Class</th>
+                    <th>Example</th>
+                    <th>Nursing Priority</th>
+                </tr>
+                <tr>
+                    <td><strong>ACE Inhibitors</strong></td>
+                    <td>Lisinopril</td>
+                    <td>Watch for <strong>Dry Cough</strong> and <strong>Angioedema</strong> (Emergency).</td>
+                </tr>
+                <tr>
+                    <td><strong>Beta-Blockers</strong></td>
+                    <td>Metoprolol</td>
+                    <td>Check <strong>Heart Rate</strong>; hold if < 60 bpm. Masking of hypoglycemia in DM.</td>
+                </tr>
+                <tr>
+                    <td><strong>Calcium Channel Blockers</strong></td>
+                    <td>Amlodipine</td>
+                    <td>Watch for peripheral edema and gingival hyperplasia.</td>
+                </tr>
+                <tr>
+                    <td><strong>Diuretics</strong></td>
+                    <td>Hydrochlorothiazide</td>
+                    <td>Monitor <strong>Potassium</strong> levels and orthostatic hypotension.</td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="card" style="border-top-color: var(--emergency);">
+            <h2>4. Hypertensive Crisis</h2>
+            <div style="background: #fff1f2; padding: 15px; border-radius: 8px; border: 1px solid #fda4af;">
+                <h4 style="color: #e11d48;">Urgency vs. Emergency</h4>
+                <p style="font-size: 0.9rem;"><strong>Crisis:</strong> SBP > 180 or DBP > 120.</p>
+                <p style="font-size: 0.85rem;"><strong>Emergency:</strong> Evidence of target organ damage (e.g., chest pain, confusion). Requires IV Nitroglycerin or Nitroprusside. <strong>Goal:</strong> Reduce MAP by no more than 25% in the first hour.</p>
+            </div>
+        </section>
+    </main>
+
+    <aside>
+        <div class="card" style="border-top-color: var(--secondary);">
+            <h3>Lifestyle: DASH Diet</h3>
+            <p style="font-size: 0.85rem;"><strong>Dietary Approaches to Stop Hypertension</strong></p>
+            <ul style="font-size: 0.8rem; padding-left: 15px;">
+                <li>High in fruits and vegetables.</li>
+                <li>Low-fat dairy.</li>
+                <li>Reduced saturated fat.</li>
+                <li>Sodium < 2,300mg (Ideal < 1,500mg).</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Diagnostic Strategy</h3>
+            <p style="font-size: 0.85rem;"><strong>White Coat Syndrome:</strong> Fear of clinical settings causing spikes.</p>
+            <p style="font-size: 0.8rem;"><strong>Nursing Note:</strong> Diagnosis requires <strong>two</strong> elevated readings on <strong>two</strong> separate occasions.</p>
+        </div>
+
+        <div class="card" style="background: #f8fafc;">
+            <h3>MAP Calculation</h3>
+            <p style="font-size: 0.85rem; font-weight: bold; text-align: center;">[SBP + (2 &times; DBP)] / 3</p>
+            <p style="font-size: 0.75rem; color: #666; text-align: center;">Mean Arterial Pressure (MAP) > 65 is needed to perfuse vital organs.</p>
+        </div>
+    </aside>
+</div>
+
+<footer style="margin-top: 50px; padding: 40px 0; background: white; border-top: 1px solid #ddd; text-align: center;">
+    <div class="container" style="display: block;">
+        <p style="font-weight: bold; color: var(--primary); margin-bottom: 20px;">NurseHub | Dedicated to Clinical Excellence</p>
+        
+        <div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; font-size: 0.9rem;">
+            <a href="https://www.instagram.com/obeddank12?igsh=eWZqeG5hMHN2YzJj&utm_source=qr" target="_blank" style="text-decoration: none; color: #475569;">Instagram</a>
+            <a href="https://wa.link/hkzs76" target="_blank" style="text-decoration: none; color: #475569;">WhatsApp</a>
+            <a href="https://www.facebook.com/share/1AokoTn6rH/?mibextid=wwXIfr" target="_blank" style="text-decoration: none; color: #475569;">Facebook</a>
+            <a href="https://www.tiktok.com/@obeddank12?_r=1&_t=ZM-92RnTgrx2jc" target="_blank" style="text-decoration: none; color: #475569;">TikTok</a>
+        </div>
+
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">&copy; 2025 Dankwah Obed Asante. All rights reserved.</p>
+        
+        <div id="alphabetButtonsBottom" class="alphabet-filter" style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;"></div>
+    </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
