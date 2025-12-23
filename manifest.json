@@ -1,17 +1,13 @@
 {
-  "short_name": "NurseHub",
-  "name": "NurseHub Clinical Portal",
+  "short_name": "NurseNexus",
+  "name": "NurseNexus Clinical Portal",
   "description": "Clinical reference and study tool for nursing students.",
   "icons": [
     {
       "src": "icon-192.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/index.html",
