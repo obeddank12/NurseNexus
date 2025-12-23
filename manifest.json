@@ -1,0 +1,22 @@
+{
+  "short_name": "NurseHub",
+  "name": "NurseHub Clinical Portal",
+  "description": "Clinical reference and study tool for nursing students.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#f1f5f9",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#0056b3"
+}
