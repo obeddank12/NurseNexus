@@ -2,19 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clinical Tools | NurseHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Tools | NurseNexus</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
 <nav class="navbar">
      <div class="logo">
-        <a href="index.html" style="text-decoration: none; color: inherit;">NurseHub</a>
+        <a href="index.html" style="text-decoration: none; color: inherit;">NurseNexus</a>
     </div>
     <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="diseases.html">Diseases</a></li>
-        <li><a href="tools.html" class="active">Clinical Tools</a></li>
+        <li><a href="tools.html" class="active">Tools</a></li>
         <li><a href="about.html">About</a></li>
     </ul>
 </nav>
@@ -38,13 +40,11 @@
             <div class="tool-grid">
                 <div class="tool-item">
                     <h4>Stethoscope (Dual-Head)</h4>
-                    
                     <p><strong>Clinical Use:</strong> Auscultation. <strong>Diaphragm</strong> for high-pitched sounds; <strong>Bell</strong> for low-pitched sounds (murmurs).</p>
                 </div>
 
                 <div class="tool-item">
                     <h4>Aneroid Sphygmomanometer</h4>
-                    
                     <p><strong>Clinical Use:</strong> Manual BP. The gold standard for validating automatic cuff readings in unstable patients.</p>
                 </div>
 
@@ -55,7 +55,6 @@
 
                 <div class="tool-item">
                     <h4>Reflex Hammer</h4>
-                    
                     <p><strong>Clinical Use:</strong> Testing DTRs. Essential for neuro checks and assessing Magnesium Sulfate toxicity in OB.</p>
                 </div>
 
@@ -143,34 +142,32 @@
     </main>
 
     <aside>
-    <div class="card" style="border-top-color: #f59e0b;">
-        <h3>SBAR Handover</h3>
-        <p style="font-size: 0.85rem;"><strong>S:</strong> Situation<br><strong>B:</strong> Background<br><strong>A:</strong> Assessment<br><strong>R:</strong> Recommendation</p>
-    </div>
+        <div class="card" style="border-top-color: #f59e0b;">
+            <h3>SBAR Handover</h3>
+            <p style="font-size: 0.85rem;"><strong>S:</strong> Situation<br><strong>B:</strong> Background<br><strong>A:</strong> Assessment<br><strong>R:</strong> Recommendation</p>
+        </div>
 
-    <div class="card" style="border-top-color: var(--emergency);">
-        <h3>PPE Precautions</h3>
-        
-        <ul style="font-size: 0.8rem; padding-left: 15px; line-height: 1.6;">
-            <li><strong>Standard:</strong> Hand hygiene for all patients.</li>
-            <li><strong>Contact:</strong> Gown & Gloves (e.g., C.diff, MRSA).</li>
-            <li><strong>Droplet:</strong> Surgical Mask (e.g., Flu, Pertussis).</li>
-            <li><strong>Airborne:</strong> N95 Respirator & Negative Pressure Room (e.g., TB, Measles).</li>
-        </ul>
-    </div>
+        <div class="card" style="border-top-color: var(--emergency);">
+            <h3>PPE Precautions</h3>
+            <ul style="font-size: 0.8rem; padding-left: 15px; line-height: 1.6;">
+                <li><strong>Standard:</strong> Hand hygiene for all patients.</li>
+                <li><strong>Contact:</strong> Gown & Gloves (e.g., C.diff, MRSA).</li>
+                <li><strong>Droplet:</strong> Surgical Mask (e.g., Flu, Pertussis).</li>
+                <li><strong>Airborne:</strong> N95 Respirator & Negative Pressure Room (e.g., TB, Measles).</li>
+            </ul>
+        </div>
 
-    <div class="card" style="border-top-color: #8b5cf6;">
-        <h3>Dose Formula</h3>
-        
-        <p style="font-weight: bold; text-align: center; margin: 10px 0;">(D / H) &times; Q = X</p>
-        <p style="font-size: 0.75rem; color: #666; text-align: center;">Desired / Have &times; Quantity</p>
-    </div>
- </aside>
+        <div class="card" style="border-top-color: #8b5cf6;">
+            <h3>Dose Formula</h3>
+            <p style="font-weight: bold; text-align: center; margin: 10px 0;">(D / H) &times; Q = X</p>
+            <p style="font-size: 0.75rem; color: #666; text-align: center;">Desired / Have &times; Quantity</p>
+        </div>
+    </aside>
 </div>
 
 <footer style="margin-top: 50px; padding: 40px 0; background: white; border-top: 1px solid #ddd; text-align: center;">
     <div class="container" style="display: block;">
-        <p style="font-weight: bold; color: var(--primary); margin-bottom: 20px;">NurseHub | Dedicated to Clinical Excellence</p>
+        <p style="font-weight: bold; color: var(--primary); margin-bottom: 20px;">NurseNexus | Dedicated to Clinical Excellence</p>
         
         <div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; font-size: 0.9rem;">
             <a href="https://www.instagram.com/obeddank12?igsh=eWZqeG5hMHN2YzJj&utm_source=qr" target="_blank" style="text-decoration: none; color: #475569;">Instagram</a>
@@ -180,7 +177,6 @@
         </div>
 
         <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">&copy; 2025 Dankwah Obed Asante. All rights reserved.</p>
-        
         <div id="alphabetButtonsBottom" class="alphabet-filter" style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;"></div>
     </div>
 </footer>
