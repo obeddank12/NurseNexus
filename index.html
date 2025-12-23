@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NurseNexus | Clinical Excellence Dashboard</title>
+    
+    <meta name="description" content="NurseNexus: The ultimate clinical study tool for Ghanaian nursing students. Evidence-based guides and nursing tech tips.">
+    <meta name="keywords" content="Nursing, Ghana, Clinical Excellence, NurseNexus, CoNM Mampong, Nursing Student Portal">
+    <meta name="author" content="Dankwah Obed Asante">
+
+    <meta property="og:title" content="NurseNexus | Clinical Portal">
+    <meta property="og:description" content="Empowering nursing students with clinical excellence.">
+    <meta property="og:image" content="https://obeddank12.github.io/NurseNexus/icon-512.png">
+    <meta property="og:url" content="https://obeddank12.github.io/NurseNexus/">
+    <meta property="og:type" content="website">
+
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
@@ -105,6 +116,7 @@
         </section>
     </main>
 </div>
+
 <div id="feedback-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
     <button id="feedback-btn" style="background: var(--primary); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 24px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
         💬
@@ -118,19 +130,16 @@
         
         <form action="https://formspree.io/f/xjgbpnpp" method="POST">
             <input type="text" name="name" placeholder="Your Name" required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
-            
             <input type="email" name="email" placeholder="Your Email" required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
-            
             <textarea name="message" placeholder="Type your suggestion or correction here..." required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 10px; font-family: inherit; font-size: 0.85rem; height: 100px; resize: none; margin-bottom: 10px;"></textarea>
-            
             <input type="hidden" name="_next" value="https://obeddank12.github.io/NurseNexus/index.html">
-            
             <button type="submit" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s;">
                 Submit Feedback
             </button>
         </form>
     </div>
 </div>
+
 <footer style="margin-top: 50px; padding: 40px 0; background: white; border-top: 1px solid #ddd; text-align: center;">
     <div class="container" style="display: block;">
         <p style="font-weight: bold; color: var(--primary); margin-bottom: 20px;">NurseNexus | Dedicated to Clinical Excellence</p>
