@@ -175,3 +175,34 @@ document.addEventListener('mousedown', (e) => {
         feedbackBtn.style.backgroundColor = '#0056b3';
     }
 });
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('NurseNexus PWA Registered'))
+      .catch(err => console.log('PWA Registration Failed', err));
+  });
+}
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent Chrome 67 and earlier from automatically showing the prompt
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  
+  // Optional: Show a "Install App" button or notification to the user
+  console.log('NurseNexus is ready to be installed!');
+});
+
+// If you want to trigger the install when they click a specific button:
+// document.getElementById('your-install-button').addEventListener('click', (e) => {
+//   if (deferredPrompt) {
+//     deferredPrompt.prompt();
+//     deferredPrompt.userChoice.then((choiceResult) => {
+//       if (choiceResult.outcome === 'accepted') {
+//         console.log('User accepted the NurseNexus install');
+//       }
+//       deferredPrompt = null;
+//     });
+//   }
+// });
