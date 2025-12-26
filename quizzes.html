@@ -22,8 +22,6 @@
             appId: "1:884930628136:web:e5ed1897b76d20a4bbc31d",
             measurementId: "G-Z6NJHJTMF5"
         };
-
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
@@ -83,7 +81,6 @@
     <main>
         <section id="login-stage" class="card">
             <h2>🔐 NurseNexus Cloud Portal</h2>
-            
             <div id="first-time-login">
                 <p style="font-size:0.9rem;">New here? Create a cloud account to sync your <strong>Grand Master</strong> points.</p>
                 <input type="text" id="reg-name" class="login-input" placeholder="Full Name">
@@ -91,9 +88,7 @@
                 <input type="password" id="reg-password" class="login-input" placeholder="Create Password">
                 <button onclick="registerNurse()" class="v-btn active" style="width:100%; margin-top:10px;">Create Cloud Account</button>
             </div>
-
             <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
-
             <div id="returning-login">
                 <p style="font-size:0.9rem;">Returning Nurse? Login with your email.</p>
                 <input type="email" id="login-email" class="login-input" placeholder="Email Address">
@@ -111,7 +106,6 @@
                 <span id="display-nurse-id" style="font-size:0.8rem; background:#eee; padding:4px 8px; border-radius:4px; font-family:monospace;"></span>
             </div>
             <p>Select a category to begin your "Set of 20" session.</p>
-            
             <div class="tool-grid">
                 <div class="system-card" style="border-left: 4px solid #ef4444; cursor: pointer;" onclick="loadSets('Med-Surg')">
                     <h4>🏥 Med-Surg</h4>
@@ -138,7 +132,6 @@
                     <p id="wardmanagement-count">Counting Sets...</p>
                 </div>
             </div>
-
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
                 <button onclick="logout()" style="background: none; border: none; color: #64748b; cursor: pointer;">Logout</button>
                 <button onclick="resetAllProgress()" style="background: #fee2e2; color: #dc2626; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.8rem;">⚠️ Reset Progress</button>
@@ -170,7 +163,6 @@
             <h3 style="font-size:1.1rem; margin-bottom:10px; color: #b45309; display: flex; align-items: center; gap: 5px;">👑 Grand Masters</h3>
             <div id="grand-master-content" class="aside-leaderboard"></div>
         </div>
-
         <div class="card" style="padding:15px; border-top-color:var(--primary);">
             <h3 style="font-size:1rem; margin-bottom:15px; color: var(--primary);">🏆 Category Leaders</h3>
             <div id="aside-leaderboard-content" class="aside-leaderboard"></div>
@@ -186,56 +178,44 @@
         const name = document.getElementById('reg-name').value;
         const email = document.getElementById('reg-email').value;
         const password = document.getElementById('reg-password').value;
-
         if(!email || !password || !name) return alert("Please fill all fields!");
 
         auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 const nurseID = `NX-${Math.floor(1000 + Math.random() * 9000)}`;
-                
                 return db.collection("nurses").doc(user.uid).set({
-                    name: name,
-                    nurseID: nurseID,
-                    email: email,
-                    totalPoints: 0,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    name: name, nurseID: nurseID, email: email, totalPoints: 0, createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
                     localStorage.setItem('nurse_user', name);
                     localStorage.setItem('nurse_id', nurseID);
                     alert("Account Created! Your Nurse ID is " + nurseID);
                     checkLogin();
                 });
-            })
-            .catch((error) => alert(error.message));
+            }).catch((error) => alert(error.message));
     }
 
     function loginNurse() {
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
-
         if(!email || !password) return alert("Fill all fields!");
 
         auth.signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 return db.collection("nurses").doc(userCredential.user.uid).get();
-            })
-            .then((doc) => {
+            }).then((doc) => {
                 if (doc.exists) {
                     localStorage.setItem('nurse_user', doc.data().name);
                     localStorage.setItem('nurse_id', doc.data().nurseID);
                     checkLogin();
                 }
-            })
-            .catch((error) => alert(error.message));
+            }).catch((error) => alert(error.message));
     }
 
     function forgotPassword() {
         const email = prompt("Enter your email for password reset:");
         if (email) {
-            auth.sendPasswordResetEmail(email)
-                .then(() => alert("Reset email sent!"))
-                .catch((error) => alert(error.message));
+            auth.sendPasswordResetEmail(email).then(() => alert("Reset email sent!")).catch((error) => alert(error.message));
         }
     }
 
@@ -265,21 +245,11 @@
         });
     }
 
-    function logout() { 
-        auth.signOut().then(() => {
-            localStorage.clear(); 
-            location.reload(); 
-        });
-    }
-
-    function resetAllProgress() { 
-        if(confirm("Erase all scores and ID?")) { 
-            localStorage.clear(); 
-            location.reload(); 
-        } 
-    }
-
     function loadSets(category) {
+        if (typeof quizData === 'undefined' || !quizData[category]) {
+            alert("Error: Quiz data not loaded yet. Please refresh.");
+            return;
+        }
         document.getElementById('category-stage').style.display = 'none';
         document.getElementById('set-stage').style.display = 'block';
         document.getElementById('selected-category-title').innerText = category + " Sets";
@@ -294,12 +264,60 @@
     function backToCategories() {
         document.getElementById('set-stage').style.display = 'none';
         document.getElementById('category-stage').style.display = 'block';
-        if (typeof displayLeaderboard === 'function') displayLeaderboard();
     }
+
+    function logout() { auth.signOut().then(() => { localStorage.clear(); location.reload(); }); }
+    function resetAllProgress() { if(confirm("Erase all scores and ID?")) { localStorage.clear(); location.reload(); } }
 
     window.onload = checkLogin;
 </script>
+<script src="quiz-data.js"></script>
+
+<script>
+    // 🔐 AUTH LISTENERS
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('login-stage').style.display = 'none';
+            document.getElementById('category-stage').style.display = 'block';
+            document.getElementById('leaderboard-aside').style.display = 'block';
+            const name = localStorage.getItem('nurse_user') || "Nurse";
+            document.getElementById('welcome-text').innerText = `Welcome, Nurse ${name.split(' ')[0]}!`;
+            document.getElementById('display-nurse-id').innerText = localStorage.getItem('nurse_id') || "NX-Cloud";
+            updateSetCounts();
+            if (typeof displayLeaderboard === 'function') displayLeaderboard();
+        } else {
+            document.getElementById('login-stage').style.display = 'block';
+            document.getElementById('category-stage').style.display = 'none';
+        }
+    });
+
+    // 🛠️ UI FUNCTIONS
+    function loadSets(category) {
+        if (typeof quizData === 'undefined') return alert("Data loading...");
+        document.getElementById('category-stage').style.display = 'none';
+        document.getElementById('set-stage').style.display = 'block';
+        document.getElementById('selected-category-title').innerText = category + " Sets";
+        const setList = document.getElementById('set-list');
+        setList.innerHTML = '';
+        const setsAvailable = Object.keys(quizData[category]).length;
+        for(let i=1; i<=setsAvailable; i++) {
+            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', ${i})">Set ${i}</button>`;
+        }
+    }
+    function updateSetCounts() {
+        const categories = ['Med-Surg', 'Obstetrics', 'Paediatrics', 'Public Health', 'Psychiatry', 'Ward-Management'];
+        categories.forEach(cat => {
+            const id = cat.toLowerCase().replace(/[^a-z]/g, '') + '-count';
+            const element = document.getElementById(id);
+            if(typeof quizData !== 'undefined' && quizData[cat]) {
+                element.innerText = `${Object.keys(quizData[cat]).length} Verified Sets`;
+            }
+        });
+    }
+    function backToCategories() {
+        document.getElementById('set-stage').style.display = 'none';
+        document.getElementById('category-stage').style.display = 'block';
+    }
+</script>
 
 <script src="quiz-logic.js"></script>
-</body>
-</html>
