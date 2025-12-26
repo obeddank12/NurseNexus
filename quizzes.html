@@ -7,6 +7,28 @@
     <meta name="description" content="NurseNexus Examination Portal. 3,000+ nursing licensure questions for Ghanaian students.">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCbMLvbP3h-iVKN2QvbZTnaRVT8eJX1nN8",
+            authDomain: "nursenexus-b40c9.firebaseapp.com",
+            projectId: "nursenexus-b40c9",
+            storageBucket: "nursenexus-b40c9.firebasestorage.app",
+            messagingSenderId: "884930628136",
+            appId: "1:884930628136:web:e5ed1897b76d20a4bbc31d",
+            measurementId: "G-Z6NJHJTMF5"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+
     <style>
         .quiz-container { display: none; }
         .score-display { font-weight: bold; color: var(--primary); font-size: 1.2rem; }
@@ -15,7 +37,6 @@
         .correct { background: #dcfce7 !important; border-color: #16a34a !important; }
         .wrong { background: #fee2e2 !important; border-color: #dc2626 !important; }
         
-        /* Mode Selection Modal */
         #mode-modal {
             display: none;
             position: fixed;
@@ -31,12 +52,9 @@
             width: 320px;
         }
 
-        /* Leaderboard Aside Styles */
         .aside-leaderboard { font-size: 0.8rem; }
         .cat-leader-block { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         .leader-entry { display: flex; justify-content: space-between; margin: 4px 0; align-items: center; }
-        
-        /* Login UI Styling */
         .login-input { width:100%; padding:12px; margin:5px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
     </style>
 </head>
@@ -64,37 +82,26 @@
 <div class="container">
     <main>
         <section id="login-stage" class="card">
-            <h2>🔐 Examination Portal Login</h2>
+            <h2>🔐 NurseNexus Cloud Portal</h2>
             
             <div id="first-time-login">
-                <p style="font-size:0.9rem;">First time? Create a profile to track your <strong>Grand Master</strong> points.</p>
-                <input type="text" id="student-name" class="login-input" placeholder="Enter Full Name">
-                <select id="security-q" class="login-input">
-                    <option value="">Select a Security Question</option>
-                    <option value="pet">What was the name of your first pet?</option>
-                    <option value="city">What is your mother's hometown?</option>
-                    <option value="school">What was the name of your JHS?</option>
-                </select>
-                <input type="text" id="security-a" class="login-input" placeholder="Your Answer">
-                <button onclick="generateID()" class="v-btn active" style="width:100%; margin-top:10px;">Register & Get Nurse ID</button>
+                <p style="font-size:0.9rem;">New here? Create a cloud account to sync your <strong>Grand Master</strong> points.</p>
+                <input type="text" id="reg-name" class="login-input" placeholder="Full Name">
+                <input type="email" id="reg-email" class="login-input" placeholder="Email Address">
+                <input type="password" id="reg-password" class="login-input" placeholder="Create Password">
+                <button onclick="registerNurse()" class="v-btn active" style="width:100%; margin-top:10px;">Create Cloud Account</button>
             </div>
 
             <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
 
             <div id="returning-login">
-                <p style="font-size:0.9rem;">Returning Nurse? Enter your <strong>Nurse ID</strong>.</p>
-                <input type="text" id="nurse-id-input" class="login-input" placeholder="e.g. NX-1234">
-                <button onclick="loginWithID()" class="v-btn active" style="width:100%; background: var(--secondary);">Continue Progress</button>
+                <p style="font-size:0.9rem;">Returning Nurse? Login with your email.</p>
+                <input type="email" id="login-email" class="login-input" placeholder="Email Address">
+                <input type="password" id="login-password" class="login-input" placeholder="Password">
+                <button onclick="loginNurse()" class="v-btn active" style="width:100%; background: var(--secondary);">Login to My Profile</button>
                 <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
-                    <a href="#" onclick="showRecovery()" style="color:var(--primary); text-decoration:none;">Forgot Nurse ID?</a>
+                    <a href="#" onclick="forgotPassword()" style="color:var(--primary); text-decoration:none;">Forgot Password?</a>
                 </p>
-            </div>
-
-            <div id="recovery-stage" style="display:none; background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #ddd; margin-top:15px;">
-                <h4 style="margin-top:0; color:var(--primary);">Identity Recovery</h4>
-                <p id="recovery-q-text" style="font-size:0.85rem; font-weight:bold;"></p>
-                <input type="text" id="recovery-a-input" class="login-input" placeholder="Enter Answer">
-                <button onclick="recoverID()" class="v-btn" style="width:100%; margin-top:10px;">Verify & Reveal ID</button>
             </div>
         </section>
 
@@ -172,47 +179,67 @@
 </div>
 
 <script src="quiz-data.js"></script>
+
 <script>
-    // PROFILE & LOGIN LOGIC
-    function generateID() {
-        const name = document.getElementById('student-name').value;
-        const q = document.getElementById('security-q').value;
-        const a = document.getElementById('security-a').value.toLowerCase().trim();
-        if(!name || !q || !a) return alert("Fill all fields to secure your profile!");
+    // 1. CLOUD AUTH LOGIC
+    function registerNurse() {
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
 
-        const nurseID = `NX-${Math.floor(1000 + Math.random() * 9000)}`;
-        localStorage.setItem('nurse_user', name);
-        localStorage.setItem('nurse_id', nurseID);
-        localStorage.setItem('nurse_security_q', q);
-        localStorage.setItem('nurse_security_a', a);
-        
-        alert(`Profile Created!\n\nYOUR ID: ${nurseID}\nWrite it down. Use your security question to recover it if lost.`);
-        checkLogin();
+        if(!email || !password || !name) return alert("Please fill all fields!");
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                const nurseID = `NX-${Math.floor(1000 + Math.random() * 9000)}`;
+                
+                return db.collection("nurses").doc(user.uid).set({
+                    name: name,
+                    nurseID: nurseID,
+                    email: email,
+                    totalPoints: 0,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    localStorage.setItem('nurse_user', name);
+                    localStorage.setItem('nurse_id', nurseID);
+                    alert("Account Created! Your Nurse ID is " + nurseID);
+                    checkLogin();
+                });
+            })
+            .catch((error) => alert(error.message));
     }
 
-    function loginWithID() {
-        const inputID = document.getElementById('nurse-id-input').value.trim().toUpperCase();
-        const savedID = localStorage.getItem('nurse_id');
-        if(inputID === savedID) { checkLogin(); } else { alert("ID not recognized on this device."); }
+    function loginNurse() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        if(!email || !password) return alert("Fill all fields!");
+
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                return db.collection("nurses").doc(userCredential.user.uid).get();
+            })
+            .then((doc) => {
+                if (doc.exists) {
+                    localStorage.setItem('nurse_user', doc.data().name);
+                    localStorage.setItem('nurse_id', doc.data().nurseID);
+                    checkLogin();
+                }
+            })
+            .catch((error) => alert(error.message));
     }
 
-    function showRecovery() {
-        const qKey = localStorage.getItem('nurse_security_q');
-        if(!qKey) return alert("No profile found on this device.");
-        const questions = { pet: "Name of first pet?", city: "Mother's hometown?", school: "Name of JHS?" };
-        document.getElementById('returning-login').style.display = 'none';
-        document.getElementById('recovery-stage').style.display = 'block';
-        document.getElementById('recovery-q-text').innerText = questions[qKey];
+    function forgotPassword() {
+        const email = prompt("Enter your email for password reset:");
+        if (email) {
+            auth.sendPasswordResetEmail(email)
+                .then(() => alert("Reset email sent!"))
+                .catch((error) => alert(error.message));
+        }
     }
 
-    function recoverID() {
-        const ans = document.getElementById('recovery-a-input').value.toLowerCase().trim();
-        if(ans === localStorage.getItem('nurse_security_a')) {
-            alert(`Verified! Your ID: ${localStorage.getItem('nurse_id')}`);
-            location.reload();
-        } else { alert("Incorrect Answer."); }
-    }
-
+    // 2. CORE UI LOGIC
     function checkLogin() {
         const id = localStorage.getItem('nurse_id');
         const user = localStorage.getItem('nurse_user');
@@ -238,8 +265,19 @@
         });
     }
 
-    function logout() { localStorage.removeItem('nurse_user'); location.reload(); }
-    function resetAllProgress() { if(confirm("Erase all scores and ID?")) { localStorage.clear(); location.reload(); } }
+    function logout() { 
+        auth.signOut().then(() => {
+            localStorage.clear(); 
+            location.reload(); 
+        });
+    }
+
+    function resetAllProgress() { 
+        if(confirm("Erase all scores and ID?")) { 
+            localStorage.clear(); 
+            location.reload(); 
+        } 
+    }
 
     function loadSets(category) {
         document.getElementById('category-stage').style.display = 'none';
@@ -261,6 +299,7 @@
 
     window.onload = checkLogin;
 </script>
+
 <script src="quiz-logic.js"></script>
 </body>
 </html>
