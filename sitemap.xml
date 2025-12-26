@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://obeddank12.github.io/NurseNexus/index.html</loc></url>
-  <url><loc>https://obeddank12.github.io/NurseNexus/about.html</loc></url>
-  <url><loc>https://obeddank12.github.io/NurseNexus/tools.html</loc></url>
+  <url>
+    <loc>https://obeddank12.github.io/NurseNexus/index.html</loc>
+    <lastmod>2025-12-26</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://obeddank12.github.io/NurseNexus/about.html</loc>
+    <lastmod>2025-12-26</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://obeddank12.github.io/NurseNexus/quizzes.html</loc>
+    <lastmod>2025-12-26</lastmod>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://obeddank12.github.io/NurseNexus/tools.html</loc>
+    <lastmod>2025-12-26</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://obeddank12.github.io/NurseNexus/diseases.html</loc>
+    <lastmod>2025-12-26</lastmod>
+    <priority>0.80</priority>
+  </url>
+
   <url><loc>https://obeddank12.github.io/NurseNexus/hypertension.html</loc></url>
   <url><loc>https://obeddank12.github.io/NurseNexus/heart-failure.html</loc></url>
+  
+  <url><loc>https://obeddank12.github.io/NurseNexus/asthma.html</loc></url>
+  <url><loc>https://obeddank12.github.io/NurseNexus/copd.html</loc></url>
+
   <url><loc>https://obeddank12.github.io/NurseNexus/diabetes-mellitus.html</loc></url>
+  <url><loc>https://obeddank12.github.io/NurseNexus/diabetes-insipidus.html</loc></url>
+
+  <url><loc>https://obeddank12.github.io/NurseNexus/stroke.html</loc></url>
 </urlset>

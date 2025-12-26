@@ -238,3 +238,44 @@ html { scroll-behavior: smooth; }
     .card { box-shadow: none; border: 1px solid #eee; }
     body { background: white; }
 }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* FEEDBACK UI MATCH */
+#feedback-btn {
+    background: var(--primary) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#feedback-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 86, 179, 0.4) !important;
+}
+
+#feedback-card h4 {
+    color: var(--primary);
+    border-bottom: 1px solid var(--bg-light);
+    padding-bottom: 8px;
+}
+/* DARK MODE OVERRIDES */
+body.dark-theme {
+    --bg-light: #0f172a;    /* Deep Midnight Blue */
+    --white: #1e293b;      /* Dark Slate Card Background */
+    --text-dark: #f1f5f9;  /* Light Grey Text */
+    --primary: #38bdf8;    /* Brighter Blue for Visibility */
+}
+
+body.dark-theme .navbar, 
+body.dark-theme footer {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+body.dark-theme .system-card,
+body.dark-theme .tool-item {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+body.dark-theme .system-card ul li a {
+    color: #94a3b8;
+}

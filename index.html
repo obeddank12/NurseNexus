@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NurseNexus | Clinical Excellence Dashboard</title>
     
-    <meta name="description" content="NurseNexus: The ultimate clinical study tool for Ghanaian nursing students. Evidence-based guides and nursing tech tips.">
-    <meta name="keywords" content="Nursing, Ghana, Clinical Excellence, NurseNexus, CoNM Mampong, Nursing Student Portal">
+    <meta name="description" content="NurseNexus: The ultimate clinical study tool for Ghanaian nursing students. Featuring the full Erasmus 3,000 question series.">
+    <meta name="keywords" content="Nursing, Ghana, Clinical Excellence, NurseNexus, CoNM Mampong, Erasmus Series, Licensing Exam">
     <meta name="author" content="Dankwah Obed Asante">
 
     <meta property="og:title" content="NurseNexus | Clinical Portal">
-    <meta property="og:description" content="Empowering nursing students with clinical excellence.">
+    <meta property="og:description" content="Empowering nursing students with 3,000+ verified licensure questions.">
     <meta property="og:image" content="https://obeddank12.github.io/NurseNexus/icon-512.png">
     <meta property="og:url" content="https://obeddank12.github.io/NurseNexus/">
     <meta property="og:type" content="website">
@@ -28,7 +28,8 @@
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="diseases.html">Diseases</a></li>
         <li><a href="tools.html">Tools</a></li>
-        <li><a href="about.html">About</a></li>
+        <li><a href="quizzes.html">Quizzes</a></li> <li><a href="about.html">About</a></li>
+        <li><button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌙</button></li>
     </ul>
 </nav>
 
@@ -39,6 +40,20 @@
 
 <div class="container full-width">
     <main>
+        <section class="card" style="border-top-color: #f59e0b; background: #fffbeb; margin-bottom: 25px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <div style="flex: 1; min-width: 280px;">
+                    <h2 style="color: #92400e; margin: 0;">🎓 Licensure Exam Prep (Erasmus Series)</h2>
+                    <p style="color: #b45309; margin: 8px 0 0 0; font-size: 0.95rem;">
+                        Prepare with our comprehensive bank of <strong>3,000+ verified questions</strong> covering Med-Surg, Obs, Paeds, Public Health, and more.
+                    </p>
+                </div>
+                <a href="quizzes.html" style="background: #f59e0b; color: white; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; display: inline-block; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); transition: 0.3s;">
+                    Start Quiz Portal →
+                </a>
+            </div>
+        </section>
+
         <section class="card" style="border-top-color: var(--primary);">
             <h2>Clinical Systems Dashboard</h2>
             <p>Access detailed nursing care plans and clinical tools by body system.</p>
@@ -97,7 +112,8 @@
         </section>
 
         <section class="card" style="border-top-color: #6366f1;">
-            <h2>Glasgow Coma Scale (GCS)</h2>
+            <h2>Glasgow Coma Scale (GCS) Assessment</h2>
+            
             <table class="clinical-table">
                 <thead>
                     <tr style="background: #f1f5f9;">
@@ -121,21 +137,14 @@
     <button id="feedback-btn" style="background: var(--primary); color: white; border: none; width: 60px; height: 60px; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 24px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
         💬
     </button>
-
     <div id="feedback-card" style="display: none; position: absolute; bottom: 80px; right: 0; width: 320px; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); padding: 20px; border: 1px solid #eee;">
-        <h4 style="margin: 0 0 10px 0; color: var(--primary); display: flex; align-items: center; gap: 8px;">
-            📩 NurseNexus Feedback
-        </h4>
-        <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Report a clinical error or suggest an update.</p>
-        
+        <h4 style="margin: 0 0 10px 0; color: var(--primary); display: flex; align-items: center; gap: 8px;">📩 NurseNexus Feedback</h4>
         <form action="https://formspree.io/f/xjgbpnpp" method="POST">
             <input type="text" name="name" placeholder="Your Name" required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
             <input type="email" name="email" placeholder="Your Email" required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 8px; font-size: 0.85rem; margin-bottom: 10px;">
-            <textarea name="message" placeholder="Type your suggestion or correction here..." required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 10px; font-family: inherit; font-size: 0.85rem; height: 100px; resize: none; margin-bottom: 10px;"></textarea>
+            <textarea name="message" placeholder="Type your suggestion here..." required style="width: 100%; border: 1px solid #ddd; border-radius: 5px; padding: 10px; font-family: inherit; font-size: 0.85rem; height: 100px; resize: none; margin-bottom: 10px;"></textarea>
             <input type="hidden" name="_next" value="https://obeddank12.github.io/NurseNexus/index.html">
-            <button type="submit" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s;">
-                Submit Feedback
-            </button>
+            <button type="submit" style="width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer;">Submit Feedback</button>
         </form>
     </div>
 </div>
@@ -143,16 +152,13 @@
 <footer style="margin-top: 50px; padding: 40px 0; background: white; border-top: 1px solid #ddd; text-align: center;">
     <div class="container" style="display: block;">
         <p style="font-weight: bold; color: var(--primary); margin-bottom: 20px;">NurseNexus | Dedicated to Clinical Excellence</p>
-        
         <div style="display: flex; justify-content: center; gap: 25px; margin-bottom: 25px; font-size: 0.9rem;">
-            <a href="https://www.instagram.com/obeddank12?igsh=eWZqeG5hMHN2YzJj&utm_source=qr" target="_blank" style="text-decoration: none; color: #475569;">Instagram</a>
+            <a href="https://www.instagram.com/obeddank12" target="_blank" style="text-decoration: none; color: #475569;">Instagram</a>
             <a href="https://wa.link/hkzs76" target="_blank" style="text-decoration: none; color: #475569;">WhatsApp</a>
-            <a href="https://www.facebook.com/share/1AokoTn6rH/?mibextid=wwXIfr" target="_blank" style="text-decoration: none; color: #475569;">Facebook</a>
-            <a href="https://www.tiktok.com/@obeddank12?_r=1&_t=ZM-92RnTgrx2jc" target="_blank" style="text-decoration: none; color: #475569;">TikTok</a>
+            <a href="https://www.facebook.com/share/1AokoTn6rH/" target="_blank" style="text-decoration: none; color: #475569;">Facebook</a>
+            <a href="https://www.tiktok.com/@obeddank12" target="_blank" style="text-decoration: none; color: #475569;">TikTok</a>
         </div>
-
-        <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">&copy; 2025 Dankwah Obed Asante. All rights reserved.</p>
-        <div id="alphabetButtonsBottom" class="alphabet-filter" style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;"></div>
+        <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 10px;">&copy; 2025 Dankwah Obed Asante. Developed for CoNM Mampong.</p>
     </div>
 </footer>
 

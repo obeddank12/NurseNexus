@@ -206,3 +206,20 @@ window.addEventListener('beforeinstallprompt', (e) => {
 //     });
 //   }
 // });
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+
+// Check for saved user preference
+if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark-theme');
+    themeToggle.innerText = '☀️';
+}
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-theme');
+    const isDark = body.classList.contains('dark-theme');
+    
+    // Save preference and update icon
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    themeToggle.innerText = isDark ? '☀️' : '🌙';
+});
