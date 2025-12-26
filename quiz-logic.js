@@ -221,3 +221,51 @@ function displayLeaderboard() {
         catContainer.innerHTML += block + `</div>`;
     });
 }
+function generateID() {
+    const name = document.getElementById('student-name').value;
+    const ques = document.getElementById('security-q').value;
+    const ans = document.getElementById('security-a').value.toLowerCase().trim();
+
+    if(!name || !ques || !ans) return alert("Please fill all fields to secure your progress!");
+
+    const nurseID = `NX-${Math.floor(1000 + Math.random() * 9000)}`;
+    
+    // Save everything as a single profile object
+    localStorage.setItem('nurse_user', name);
+    localStorage.setItem('nurse_id', nurseID);
+    localStorage.setItem('nurse_security_q', ques);
+    localStorage.setItem('nurse_security_a', ans);
+    
+    alert(`Welcome ${name}!\n\nYOUR NURSE ID: ${nurseID}\nWrite this down! You can recover it using your security question if you forget.`);
+    checkLogin();
+}
+
+function showRecovery() {
+    const savedQ = localStorage.getItem('nurse_security_q');
+    if(!savedQ) return alert("No profile found on this device.");
+    
+    const questions = {
+        pet: "What was the name of your first pet?",
+        city: "What is your mother's hometown?",
+        school: "What was the name of your junior high school?"
+    };
+
+    document.getElementById('returning-login').style.display = 'none';
+    document.getElementById('recovery-stage').style.display = 'block';
+    document.getElementById('recovery-q-text').innerText = questions[savedQ];
+}
+
+function recoverID() {
+    const enteredAns = document.getElementById('recovery-a-input').value.toLowerCase().trim();
+    const savedAns = localStorage.getItem('nurse_security_a');
+    const savedID = localStorage.getItem('nurse_id');
+
+    if(enteredAns === savedAns) {
+        alert(`Identity Verified! Your Nurse ID is: ${savedID}`);
+        document.getElementById('nurse-id-input').value = savedID;
+        document.getElementById('recovery-stage').style.display = 'none';
+        document.getElementById('returning-login').style.display = 'block';
+    } else {
+        alert("Incorrect answer. Please try again.");
+    }
+}

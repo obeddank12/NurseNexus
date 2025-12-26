@@ -32,20 +32,12 @@
         }
 
         /* Leaderboard Aside Styles */
-        .aside-leaderboard {
-            font-size: 0.8rem;
-        }
-        .cat-leader-block {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .leader-entry {
-            display: flex;
-            justify-content: space-between;
-            margin: 4px 0;
-            align-items: center;
-        }
+        .aside-leaderboard { font-size: 0.8rem; }
+        .cat-leader-block { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .leader-entry { display: flex; justify-content: space-between; margin: 4px 0; align-items: center; }
+        
+        /* Login UI Styling */
+        .login-input { width:100%; padding:12px; margin:5px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -73,13 +65,44 @@
     <main>
         <section id="login-stage" class="card">
             <h2>🔐 Examination Portal Login</h2>
-            <p>Please enter your name to track your progress through the sets.</p>
-            <input type="text" id="student-name" placeholder="Enter Full Name" style="width:100%; padding:12px; margin:15px 0; border-radius: 5px; border: 1px solid #ccc;">
-            <button onclick="saveLogin()" class="v-btn active" style="width:100%;">Access Question Bank</button>
+            
+            <div id="first-time-login">
+                <p style="font-size:0.9rem;">First time? Create a profile to track your <strong>Grand Master</strong> points.</p>
+                <input type="text" id="student-name" class="login-input" placeholder="Enter Full Name">
+                <select id="security-q" class="login-input">
+                    <option value="">Select a Security Question</option>
+                    <option value="pet">What was the name of your first pet?</option>
+                    <option value="city">What is your mother's hometown?</option>
+                    <option value="school">What was the name of your JHS?</option>
+                </select>
+                <input type="text" id="security-a" class="login-input" placeholder="Your Answer">
+                <button onclick="generateID()" class="v-btn active" style="width:100%; margin-top:10px;">Register & Get Nurse ID</button>
+            </div>
+
+            <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+
+            <div id="returning-login">
+                <p style="font-size:0.9rem;">Returning Nurse? Enter your <strong>Nurse ID</strong>.</p>
+                <input type="text" id="nurse-id-input" class="login-input" placeholder="e.g. NX-1234">
+                <button onclick="loginWithID()" class="v-btn active" style="width:100%; background: var(--secondary);">Continue Progress</button>
+                <p style="text-align:center; margin-top:15px; font-size:0.8rem;">
+                    <a href="#" onclick="showRecovery()" style="color:var(--primary); text-decoration:none;">Forgot Nurse ID?</a>
+                </p>
+            </div>
+
+            <div id="recovery-stage" style="display:none; background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #ddd; margin-top:15px;">
+                <h4 style="margin-top:0; color:var(--primary);">Identity Recovery</h4>
+                <p id="recovery-q-text" style="font-size:0.85rem; font-weight:bold;"></p>
+                <input type="text" id="recovery-a-input" class="login-input" placeholder="Enter Answer">
+                <button onclick="recoverID()" class="v-btn" style="width:100%; margin-top:10px;">Verify & Reveal ID</button>
+            </div>
         </section>
 
         <section id="category-stage" class="card" style="display:none;">
-            <h2 id="welcome-text">Welcome, Nurse!</h2>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <h2 id="welcome-text" style="margin:0;">Welcome!</h2>
+                <span id="display-nurse-id" style="font-size:0.8rem; background:#eee; padding:4px 8px; border-radius:4px; font-family:monospace;"></span>
+            </div>
             <p>Select a category to begin your "Set of 20" session.</p>
             
             <div class="tool-grid">
@@ -124,51 +147,81 @@
         <section id="quiz-stage" class="card quiz-container">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span id="question-count">Question 1 of 20</span>
-                <span id="timer-display" style="font-weight:bold; color:var(--emergency);"></span>
+                <span id="timer-display" style="font-weight:bold;"></span>
             </div>
             <div class="progress-bar" style="height:8px; background:#e2e8f0; border-radius:4px; margin: 15px 0;">
                 <div id="progress-fill" style="height:100%; width:0%; background:var(--primary); border-radius:4px;"></div>
             </div>
-            
             <h3 id="question-text" style="margin-bottom: 20px;">Loading question...</h3>
             <div id="options-container"></div>
-            
-            <button id="next-btn" onclick="nextQuestion()" style="display:none; width:100%; margin-top:20px;" class="v-btn active">Next Question</button>
+            <button id="next-btn" style="display:none; width:100%; margin-top:20px;" class="v-btn active">Next Question</button>
         </section>
     </main>
 
     <aside id="leaderboard-aside" style="display:none;">
         <div class="card" style="padding:15px; border-top-color: #f59e0b; background: #fffbeb; margin-bottom: 20px;">
             <h3 style="font-size:1.1rem; margin-bottom:10px; color: #b45309; display: flex; align-items: center; gap: 5px;">👑 Grand Masters</h3>
-            <div id="grand-master-content" class="aside-leaderboard">
-                </div>
+            <div id="grand-master-content" class="aside-leaderboard"></div>
         </div>
 
         <div class="card" style="padding:15px; border-top-color:var(--primary);">
             <h3 style="font-size:1rem; margin-bottom:15px; color: var(--primary);">🏆 Category Leaders</h3>
-            <div id="aside-leaderboard-content" class="aside-leaderboard">
-                </div>
+            <div id="aside-leaderboard-content" class="aside-leaderboard"></div>
         </div>
     </aside>
 </div>
 
 <script src="quiz-data.js"></script>
 <script>
-    function saveLogin() {
+    // PROFILE & LOGIN LOGIC
+    function generateID() {
         const name = document.getElementById('student-name').value;
-        if(name) {
-            localStorage.setItem('nurse_user', name);
-            checkLogin();
-        }
+        const q = document.getElementById('security-q').value;
+        const a = document.getElementById('security-a').value.toLowerCase().trim();
+        if(!name || !q || !a) return alert("Fill all fields to secure your profile!");
+
+        const nurseID = `NX-${Math.floor(1000 + Math.random() * 9000)}`;
+        localStorage.setItem('nurse_user', name);
+        localStorage.setItem('nurse_id', nurseID);
+        localStorage.setItem('nurse_security_q', q);
+        localStorage.setItem('nurse_security_a', a);
+        
+        alert(`Profile Created!\n\nYOUR ID: ${nurseID}\nWrite it down. Use your security question to recover it if lost.`);
+        checkLogin();
+    }
+
+    function loginWithID() {
+        const inputID = document.getElementById('nurse-id-input').value.trim().toUpperCase();
+        const savedID = localStorage.getItem('nurse_id');
+        if(inputID === savedID) { checkLogin(); } else { alert("ID not recognized on this device."); }
+    }
+
+    function showRecovery() {
+        const qKey = localStorage.getItem('nurse_security_q');
+        if(!qKey) return alert("No profile found on this device.");
+        const questions = { pet: "Name of first pet?", city: "Mother's hometown?", school: "Name of JHS?" };
+        document.getElementById('returning-login').style.display = 'none';
+        document.getElementById('recovery-stage').style.display = 'block';
+        document.getElementById('recovery-q-text').innerText = questions[qKey];
+    }
+
+    function recoverID() {
+        const ans = document.getElementById('recovery-a-input').value.toLowerCase().trim();
+        if(ans === localStorage.getItem('nurse_security_a')) {
+            alert(`Verified! Your ID: ${localStorage.getItem('nurse_id')}`);
+            location.reload();
+        } else { alert("Incorrect Answer."); }
     }
 
     function checkLogin() {
+        const id = localStorage.getItem('nurse_id');
         const user = localStorage.getItem('nurse_user');
-        if(user) {
+        if(id && user) {
             document.getElementById('login-stage').style.display = 'none';
             document.getElementById('category-stage').style.display = 'block';
             document.getElementById('leaderboard-aside').style.display = 'block';
-            document.getElementById('welcome-text').innerText = `Welcome, Nurse ${user}!`;
+            document.getElementById('welcome-text').innerText = `Welcome, Nurse ${user.split(' ')[0]}!`;
+            document.getElementById('display-nurse-id').innerText = id;
             updateSetCounts();
             if (typeof displayLeaderboard === 'function') displayLeaderboard();
         }
@@ -180,42 +233,23 @@
             const id = cat.toLowerCase().replace(/[^a-z]/g, '') + '-count';
             const element = document.getElementById(id);
             if(typeof quizData !== 'undefined' && quizData[cat]) {
-                const count = Object.keys(quizData[cat]).length;
-                if(element) element.innerText = `${count} Verified Sets`;
-            } else {
-                if(element) element.innerText = `0 Sets`;
+                element.innerText = `${Object.keys(quizData[cat]).length} Verified Sets`;
             }
         });
     }
 
-    function logout() {
-        localStorage.removeItem('nurse_user');
-        location.reload();
-    }
-
-    function resetAllProgress() {
-        if(confirm("This will permanently delete your scores and login. Continue?")) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
+    function logout() { localStorage.removeItem('nurse_user'); location.reload(); }
+    function resetAllProgress() { if(confirm("Erase all scores and ID?")) { localStorage.clear(); location.reload(); } }
 
     function loadSets(category) {
-        if (!quizData[category]) {
-            alert("Category data missing!");
-            return;
-        }
-        window.currentCategory = category; 
         document.getElementById('category-stage').style.display = 'none';
         document.getElementById('set-stage').style.display = 'block';
         document.getElementById('selected-category-title').innerText = category + " Sets";
-        
         const setList = document.getElementById('set-list');
         setList.innerHTML = '';
         const setsAvailable = Object.keys(quizData[category]).length;
-        
         for(let i=1; i<=setsAvailable; i++) {
-            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', ${i})">Set ${i} (Questions ${((i-1)*20)+1} - ${i*20})</button>`;
+            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', ${i})">Set ${i} (Q ${((i-1)*20)+1}-${i*20})</button>`;
         }
     }
 
