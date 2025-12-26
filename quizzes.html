@@ -15,11 +15,37 @@
         .correct { background: #dcfce7 !important; border-color: #16a34a !important; }
         .wrong { background: #fee2e2 !important; border-color: #dc2626 !important; }
         
-        /* Leaderboard Styles */
-        .leaderboard-section { margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 10px; border: 1px solid #e2e8f0; }
-        .leaderboard-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
-        .leaderboard-table th { text-align: left; border-bottom: 2px solid #cbd5e1; padding: 8px 5px; color: #64748b; }
-        .leaderboard-table td { padding: 8px 5px; border-bottom: 1px solid #e2e8f0; }
+        /* Mode Selection Modal */
+        #mode-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            z-index: 10001;
+            text-align: center;
+            width: 320px;
+        }
+
+        /* Leaderboard Aside Styles */
+        .aside-leaderboard {
+            font-size: 0.8rem;
+        }
+        .cat-leader-block {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .leader-entry {
+            display: flex;
+            justify-content: space-between;
+            margin: 4px 0;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -34,6 +60,15 @@
     </ul>
 </nav>
 
+<div id="mode-modal">
+    <h3 style="color:var(--primary); margin-top:0;">Select Quiz Mode</h3>
+    <p style="font-size:0.85rem; color:#64748b; margin-bottom: 20px;">
+        ⚠️ <strong>Note:</strong> Only ⏱️ Timed Mode results are eligible for the Campus Leaderboards.
+    </p>
+    <button onclick="confirmMode('normal')" class="option-btn" style="text-align:center;">📖 Normal Mode (Study)</button>
+    <button onclick="confirmMode('timed')" class="option-btn" style="text-align:center; background: #fff7ed; border-color: #f59e0b; font-weight: bold;">⏱️ Timed Mode (Ranked)</button>
+</div>
+
 <div class="container">
     <main>
         <section id="login-stage" class="card">
@@ -45,21 +80,6 @@
 
         <section id="category-stage" class="card" style="display:none;">
             <h2 id="welcome-text">Welcome, Nurse!</h2>
-            
-            <div class="leaderboard-section">
-                <h4 style="color: var(--primary); margin-top: 0;">🏆 Campus Leaderboard (Top 5)</h4>
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th>Nurse</th>
-                            <th>Category</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody id="score-rows"></tbody>
-                </table>
-            </div>
-
             <p>Select a category to begin your "Set of 20" session.</p>
             
             <div class="tool-grid">
@@ -104,6 +124,7 @@
         <section id="quiz-stage" class="card quiz-container">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span id="question-count">Question 1 of 20</span>
+                <span id="timer-display" style="font-weight:bold; color:var(--emergency);"></span>
             </div>
             <div class="progress-bar" style="height:8px; background:#e2e8f0; border-radius:4px; margin: 15px 0;">
                 <div id="progress-fill" style="height:100%; width:0%; background:var(--primary); border-radius:4px;"></div>
@@ -115,6 +136,20 @@
             <button id="next-btn" onclick="nextQuestion()" style="display:none; width:100%; margin-top:20px;" class="v-btn active">Next Question</button>
         </section>
     </main>
+
+    <aside id="leaderboard-aside" style="display:none;">
+        <div class="card" style="padding:15px; border-top-color: #f59e0b; background: #fffbeb; margin-bottom: 20px;">
+            <h3 style="font-size:1.1rem; margin-bottom:10px; color: #b45309; display: flex; align-items: center; gap: 5px;">👑 Grand Masters</h3>
+            <div id="grand-master-content" class="aside-leaderboard">
+                </div>
+        </div>
+
+        <div class="card" style="padding:15px; border-top-color:var(--primary);">
+            <h3 style="font-size:1rem; margin-bottom:15px; color: var(--primary);">🏆 Category Leaders</h3>
+            <div id="aside-leaderboard-content" class="aside-leaderboard">
+                </div>
+        </div>
+    </aside>
 </div>
 
 <script src="quiz-data.js"></script>
@@ -132,39 +167,18 @@
         if(user) {
             document.getElementById('login-stage').style.display = 'none';
             document.getElementById('category-stage').style.display = 'block';
+            document.getElementById('leaderboard-aside').style.display = 'block';
             document.getElementById('welcome-text').innerText = `Welcome, Nurse ${user}!`;
             updateSetCounts();
-            displayLeaderboard();
+            if (typeof displayLeaderboard === 'function') displayLeaderboard();
         }
-    }
-
-    function displayLeaderboard() {
-        const scores = JSON.parse(localStorage.getItem('nurse_high_scores')) || [];
-        const container = document.getElementById('score-rows');
-        container.innerHTML = '';
-
-        if(scores.length === 0) {
-            container.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:#94a3b8;">No scores yet. Complete a quiz to appear here!</td></tr>';
-            return;
-        }
-
-        scores.sort((a,b) => b.percent - a.percent).slice(0, 5).forEach(entry => {
-            container.innerHTML += `
-                <tr>
-                    <td>${entry.name}</td>
-                    <td>${entry.cat}</td>
-                    <td style="font-weight:bold; color:var(--primary);">${entry.percent}%</td>
-                </tr>`;
-        });
     }
 
     function updateSetCounts() {
         const categories = ['Med-Surg', 'Obstetrics', 'Paediatrics', 'Public Health', 'Psychiatry', 'Ward-Management'];
         categories.forEach(cat => {
-            // Updated ID mapping to handle spaces and dashes correctly
             const id = cat.toLowerCase().replace(/[^a-z]/g, '') + '-count';
             const element = document.getElementById(id);
-            
             if(typeof quizData !== 'undefined' && quizData[cat]) {
                 const count = Object.keys(quizData[cat]).length;
                 if(element) element.innerText = `${count} Verified Sets`;
@@ -180,7 +194,7 @@
     }
 
     function resetAllProgress() {
-        if(confirm("This will permanently delete your high scores and login. Continue?")) {
+        if(confirm("This will permanently delete your scores and login. Continue?")) {
             localStorage.clear();
             location.reload();
         }
@@ -191,7 +205,7 @@
             alert("Category data missing!");
             return;
         }
-
+        window.currentCategory = category; 
         document.getElementById('category-stage').style.display = 'none';
         document.getElementById('set-stage').style.display = 'block';
         document.getElementById('selected-category-title').innerText = category + " Sets";
@@ -208,7 +222,7 @@
     function backToCategories() {
         document.getElementById('set-stage').style.display = 'none';
         document.getElementById('category-stage').style.display = 'block';
-        displayLeaderboard();
+        if (typeof displayLeaderboard === 'function') displayLeaderboard();
     }
 
     window.onload = checkLogin;
