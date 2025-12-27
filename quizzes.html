@@ -32,6 +32,7 @@
         .score-display { font-weight: bold; color: var(--primary); font-size: 1.2rem; }
         .option-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; text-align: left; transition: 0.3s; }
         .option-btn:hover { background: #f0f9ff; border-color: var(--primary); }
+        .option-btn.selected { background: #e0f2fe !important; border-color: var(--primary) !important; border-width: 2px; }
         .correct { background: #dcfce7 !important; border-color: #16a34a !important; }
         .wrong { background: #fee2e2 !important; border-color: #dc2626 !important; }
         
@@ -105,7 +106,6 @@
                 <h2 id="welcome-text" style="margin:0;">Welcome!</h2>
                 <span id="display-nurse-id" style="font-size:0.8rem; background:#eee; padding:4px 8px; border-radius:4px; font-family:monospace;"></span>
             </div>
-            <p>Select a category to begin your "Set of 20" session.</p>
             <div class="tool-grid">
                 <div class="system-card" style="border-left: 4px solid #ef4444; cursor: pointer;" onclick="loadSets('Med-Surg')">
                     <h4>🏥 Med-Surg</h4>
@@ -147,14 +147,14 @@
         <section id="quiz-stage" class="card quiz-container">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span id="question-count">Question 1 of 20</span>
-                <span id="timer-display" style="font-weight:bold;"></span>
+                <span id="timer-display" style="font-weight:bold; color: var(--emergency);"></span>
             </div>
             <div class="progress-bar" style="height:8px; background:#e2e8f0; border-radius:4px; margin: 15px 0;">
                 <div id="progress-fill" style="height:100%; width:0%; background:var(--primary); border-radius:4px;"></div>
             </div>
             <h3 id="question-text" style="margin-bottom: 20px;">Loading question...</h3>
             <div id="options-container"></div>
-            <button id="next-btn" style="display:none; width:100%; margin-top:20px;" class="v-btn active">Next Question</button>
+            <button id="confirm-btn" onclick="confirmAnswer()" class="v-btn active" style="width:100%; margin-top:20px; display:none;">Confirm Answer</button>
         </section>
     </main>
 
@@ -173,16 +173,19 @@
 <script src="quiz-data.js"></script>
 
 <script>
-    // 🔐 AUTH LISTENERS
+    // --- 🔐 AUTH LISTENERS & CORE UI ---
     auth.onAuthStateChanged((user) => {
         if (user) {
             document.getElementById('login-stage').style.display = 'none';
             document.getElementById('category-stage').style.display = 'block';
             document.getElementById('leaderboard-aside').style.display = 'block';
+            
             const name = localStorage.getItem('nurse_user') || "Nurse";
             document.getElementById('welcome-text').innerText = `Welcome, Nurse ${name.split(' ')[0]}!`;
             document.getElementById('display-nurse-id').innerText = localStorage.getItem('nurse_id') || "NX-Cloud";
+            
             updateSetCounts();
+            // RE-TRIGGER LEADERBOARD DISPLAY
             if (typeof displayLeaderboard === 'function') displayLeaderboard();
         } else {
             document.getElementById('login-stage').style.display = 'block';
@@ -191,7 +194,59 @@
         }
     });
 
-    // 1. CLOUD AUTH ACTIONS
+    let selectedCat = "";
+    let selectedSetNum = "";
+
+    // --- 🛠️ NAVIGATION FUNCTIONS ---
+    function loadSets(category) {
+        if (typeof quizData === 'undefined' || !quizData[category]) {
+            alert("Error: Quiz data loading. Please wait a second.");
+            return;
+        }
+        document.getElementById('category-stage').style.display = 'none';
+        document.getElementById('set-stage').style.display = 'block';
+        document.getElementById('selected-category-title').innerText = category + " Sets";
+        
+        const setList = document.getElementById('set-list');
+        setList.innerHTML = '';
+        
+        const setsAvailable = Object.keys(quizData[category]).length;
+        for(let i=1; i<=setsAvailable; i++) {
+            // MODE MODAL TRIGGER
+            setList.innerHTML += `<button class="option-btn" onclick="openModeModal('${category}', 'Set ${i}')">Set ${i}</button>`;
+        }
+    }
+
+    function openModeModal(cat, set) {
+        selectedCat = cat;
+        selectedSetNum = set;
+        document.getElementById('mode-modal').style.display = 'block';
+    }
+
+    function confirmMode(mode) {
+        isTimedMode = (mode === 'timed'); 
+        document.getElementById('mode-modal').style.display = 'none';
+        startQuiz(selectedCat, selectedSetNum);
+    }
+
+    function updateSetCounts() {
+        const categories = ['Med-Surg', 'Obstetrics', 'Paediatrics', 'Public Health', 'Psychiatry', 'Ward-Management'];
+        categories.forEach(cat => {
+            const id = cat.toLowerCase().replace(/[^a-z]/g, '') + '-count';
+            const element = document.getElementById(id);
+            if(typeof quizData !== 'undefined' && quizData[cat]) {
+                element.innerText = `${Object.keys(quizData[cat]).length} Verified Sets`;
+            }
+        });
+    }
+
+    function backToCategories() {
+        document.getElementById('set-stage').style.display = 'none';
+        document.getElementById('category-stage').style.display = 'block';
+        if (typeof displayLeaderboard === 'function') displayLeaderboard();
+    }
+
+    // --- ☁️ FIREBASE AUTH ACTIONS ---
     function registerNurse() {
         const name = document.getElementById('reg-name').value;
         const email = document.getElementById('reg-email').value;
@@ -235,45 +290,8 @@
         }
     }
 
-    // 2. UI FUNCTIONS
-    function loadSets(category) {
-        if (typeof quizData === 'undefined' || !quizData[category]) {
-            alert("Error: Quiz data loading. Please wait a second.");
-            return;
-        }
-        document.getElementById('category-stage').style.display = 'none';
-        document.getElementById('set-stage').style.display = 'block';
-        document.getElementById('selected-category-title').innerText = category + " Sets";
-        
-        const setList = document.getElementById('set-list');
-        setList.innerHTML = '';
-        
-        const setsAvailable = Object.keys(quizData[category]).length;
-        for(let i=1; i<=setsAvailable; i++) {
-            // FIXED MAPPING: We send 'Set 1' instead of just 1 to match quiz-data.js keys
-            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', 'Set ${i}')">Set ${i}</button>`;
-        }
-    }
-
-    function updateSetCounts() {
-        const categories = ['Med-Surg', 'Obstetrics', 'Paediatrics', 'Public Health', 'Psychiatry', 'Ward-Management'];
-        categories.forEach(cat => {
-            const id = cat.toLowerCase().replace(/[^a-z]/g, '') + '-count';
-            const element = document.getElementById(id);
-            if(typeof quizData !== 'undefined' && quizData[cat]) {
-                element.innerText = `${Object.keys(quizData[cat]).length} Verified Sets`;
-            }
-        });
-    }
-
-    function backToCategories() {
-        document.getElementById('set-stage').style.display = 'none';
-        document.getElementById('category-stage').style.display = 'block';
-    }
-
     function logout() { auth.signOut().then(() => { localStorage.clear(); location.reload(); }); }
-    function resetAllProgress() { if(confirm("Erase all scores and ID?")) { localStorage.clear(); location.reload(); } }
-
+    function resetAllProgress() { if(confirm("Erase all cloud and local progress?")) { localStorage.clear(); location.reload(); } }
 </script>
 
 <script src="quiz-logic.js"></script>
