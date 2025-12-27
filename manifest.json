@@ -1,25 +1,38 @@
 {
   "short_name": "NurseNexus",
-  "name": "NurseNexus Clinical Portal",
-  "description": "Clinical reference and study tool for nursing students.",
+  "name": "NurseNexus: Clinical Portal",
+  "description": "Premium clinical reference and licensure study tool for Ghanaian nursing students.",
   "id": "/NurseNexus/",
   "icons": [
     {
       "src": "icon-192.png",
       "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
       "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
     }
   ],
   "start_url": "./index.html",
-  "background_color": "#f1f5f9",
+  "background_color": "#ffffff",
   "display": "standalone",
+  "orientation": "portrait",
   "scope": "./",
   "theme_color": "#0056b3"
 }

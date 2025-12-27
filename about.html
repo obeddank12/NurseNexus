@@ -6,6 +6,10 @@
     <title>About Obed | NurseNexus</title>
 
     <meta name="description" content="NurseNexus: The ultimate clinical study tool for Ghanaian nursing students. Evidence-based guides and nursing tech tips.">
+    
+    <meta name="keywords" content="SRC President CoNM Mampong 2025, Mampong Nursing Training SRC President, NurseNexus Founder, SRC President Mampong, Nursing Student Leaders Ghana, Mampong Nursing Training College SRC">
+    <meta name="description" content="Official profile of the SRC President of Mampong Nursing and Midwifery Training College (2025). Founder and Developer of the NurseNexus Clinical Portal.">
+
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 
@@ -26,6 +30,27 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Dankwah Obed Asante",
+      "jobTitle": "SRC President 2025",
+      "affiliation": {
+        "@type": "Organization",
+        "name": "College of Nursing and Midwifery - Mampong"
+      },
+      "url": "https://obeddank12.github.io/NurseNexus/about.html",
+      "worksFor": {
+        "@type": "Project",
+        "name": "NurseNexus"
+      },
+      "sameAs": [
+        "https://www.instagram.com/obeddank12"
+      ]
+    }
     </script>
 </head>
 <body>
@@ -112,7 +137,7 @@
             <img src="profile-large.jpg" alt="Dankwah Obed Asante" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
             <p style="margin-top: 10px; font-weight: bold; font-size: 0.9rem; color: var(--primary);">Dankwah Obed Asante</p>
         </div>
-        </aside>
+    </aside>
 </div>
 
 <script>
@@ -126,7 +151,6 @@
         loading.style.display = 'none';
 
         if (user) {
-            // User is logged in
             navBtn.innerText = "Logout";
             navBtn.onclick = logoutFromAbout;
             navBtn.href = "#";
@@ -134,7 +158,6 @@
             loggedIn.style.display = 'block';
             loggedOut.style.display = 'none';
             
-            // Get data from localStorage (set during login on quizzes.html)
             const name = localStorage.getItem('nurse_user') || "Nurse";
             const id = localStorage.getItem('nurse_id') || "NX-Offline";
             
@@ -142,7 +165,6 @@
             document.getElementById('user-display-id').innerText = id;
             document.getElementById('user-initial').innerText = name.charAt(0).toUpperCase();
         } else {
-            // User is logged out
             navBtn.innerText = "Login";
             navBtn.href = "quizzes.html";
             navBtn.onclick = null;

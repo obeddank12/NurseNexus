@@ -191,29 +191,44 @@ async function displayLeaderboard() {
 
     for (let cat of categories) {
         try {
+            // Fetch more than 5 results to account for duplicates we will filter out
             const snapshot = await db.collection("leaderboard")
                 .where("category", "==", cat)
                 .orderBy("percentage", "desc")
-                .limit(5)
+                .limit(20) 
                 .get();
 
             leaderboardHTML += `<div class="cat-leader-block"><strong>${cat}</strong>`;
+            
             if (snapshot.empty) {
                 leaderboardHTML += `<div class="leader-entry" style="color:#94a3b8; font-style:italic;">No records</div>`;
             } else {
-                snapshot.docs.forEach((doc, i) => {
+                const uniqueLeaders = [];
+                const seenNurses = new Set();
+
+                // 🧠 Logic: Only keep the best score for each unique Nurse ID
+                snapshot.docs.forEach(doc => {
                     const data = doc.data();
+                    if (!seenNurses.has(data.nurseID) && uniqueLeaders.length < 5) {
+                        seenNurses.add(data.nurseID);
+                        uniqueLeaders.push(data);
+                    }
+                });
+
+                uniqueLeaders.forEach((data, i) => {
                     let medal = i === 0 ? "🥇 " : i === 1 ? "🥈 " : i === 2 ? "🥉 " : "";
-                    leaderboardHTML += `<div class="leader-entry"><span>${medal}${data.nurseName}</span><strong>${data.percentage}%</strong></div>`;
+                    leaderboardHTML += `<div class="leader-entry">
+                        <span>${medal}${data.nurseName}</span>
+                        <strong>${data.percentage}%</strong>
+                    </div>`;
                 });
             }
             leaderboardHTML += `</div>`;
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Leaderboard Error:", e); }
     }
     catContainer.innerHTML = leaderboardHTML;
     renderGrandMasters();
 }
-
 async function renderGrandMasters() {
     const gmContainer = document.getElementById('grand-master-content');
     if (!gmContainer) return;

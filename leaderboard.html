@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Fame | NurseNexus</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCbMLvbP3h-iVKN2QvbZTnaRVT8eJX1nN8",
+            authDomain: "nursenexus-b40c9.firebaseapp.com",
+            projectId: "nursenexus-b40c9",
+            storageBucket: "nursenexus-b40c9.firebasestorage.app",
+            messagingSenderId: "884930628136",
+            appId: "1:884930628136:web:e5ed1897b76d20a4bbc31d",
+            measurementId: "G-Z6NJHJTMF5"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+
+    <style>
+        .mega-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 25px; 
+            margin-top: 30px; 
+        }
+        .rank-card { 
+            padding: 20px; 
+            border-top: 5px solid var(--primary); 
+            transition: transform 0.3s ease;
+        }
+        .rank-card:hover { transform: translateY(-5px); }
+        .rank-entry { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 10px 0; 
+            border-bottom: 1px solid #f1f5f9; 
+            font-size: 0.95rem; 
+        }
+        .rank-entry:last-child { border: none; }
+        .top-3 { font-weight: bold; color: var(--primary); }
+        .number { width: 30px; display: inline-block; color: #64748b; font-weight: bold; }
+        header { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">NurseNexus</a></div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="quizzes.html">Quizzes</a></li>
+        <li><a href="leaderboard.html" class="active">Hall of Fame</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><button id="theme-toggle" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌙</button></li>
+    </ul>
+</nav>
+
+<header>
+    <h1 style="font-size: 2.5rem; margin-bottom: 10px;">🏆 Campus Hall of Fame</h1>
+    <p>The Top 20 Elite Student Nurses Across All Categories</p>
+</header>
+
+<div class="container">
+    <div id="mega-leaderboard-content" class="mega-grid">
+        </div>
+</div>
+
+<script>
+    async function loadMegaLeaderboard() {
+        const container = document.getElementById('mega-leaderboard-content');
+        const categories = ['Med-Surg', 'Obstetrics', 'Paediatrics', 'Public Health', 'Psychiatry', 'Ward-Management'];
+        
+        container.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>Fetching clinical records from Cloud...</p>";
+
+        let fullHTML = "";
+
+        for (let cat of categories) {
+            try {
+                const snapshot = await db.collection("leaderboard")
+                    .where("category", "==", cat)
+                    .orderBy("percentage", "desc")
+                    .limit(20)
+                    .get();
+
+                let listHTML = "";
+                if (snapshot.empty) {
+                    listHTML = "<p style='color:#94a3b8; font-style:italic; padding: 10px;'>Waiting for the first ranked sessions...</p>";
+                } else {
+                    snapshot.docs.forEach((doc, index) => {
+                        const data = doc.data();
+                        const isTop3 = index < 3 ? 'top-3' : '';
+                        let medal = `${index + 1}`;
+                        if (index === 0) medal = "🥇";
+                        if (index === 1) medal = "🥈";
+                        if (index === 2) medal = "🥉";
+                        
+                        listHTML += `
+                            <div class="rank-entry ${isTop3}">
+                                <span><span class="number">${medal}</span> ${data.nurseName}</span>
+                                <span style="font-weight:bold;">${data.percentage}%</span>
+                            </div>`;
+                    });
+                }
+
+                fullHTML += `
+                    <div class="card rank-card">
+                        <h3 style="color:var(--primary); margin-bottom:15px; border-bottom:2px solid #f1f5f9; padding-bottom:10px;">${cat}</h3>
+                        ${listHTML}
+                    </div>`;
+            } catch (error) {
+                console.error("Error fetching Top 20:", error);
+            }
+        }
+        container.innerHTML = fullHTML;
+    }
+
+    window.onload = loadMegaLeaderboard;
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
