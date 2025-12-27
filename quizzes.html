@@ -173,7 +173,25 @@
 <script src="quiz-data.js"></script>
 
 <script>
-    // 1. CLOUD AUTH LOGIC
+    // 🔐 AUTH LISTENERS
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('login-stage').style.display = 'none';
+            document.getElementById('category-stage').style.display = 'block';
+            document.getElementById('leaderboard-aside').style.display = 'block';
+            const name = localStorage.getItem('nurse_user') || "Nurse";
+            document.getElementById('welcome-text').innerText = `Welcome, Nurse ${name.split(' ')[0]}!`;
+            document.getElementById('display-nurse-id').innerText = localStorage.getItem('nurse_id') || "NX-Cloud";
+            updateSetCounts();
+            if (typeof displayLeaderboard === 'function') displayLeaderboard();
+        } else {
+            document.getElementById('login-stage').style.display = 'block';
+            document.getElementById('category-stage').style.display = 'none';
+            document.getElementById('leaderboard-aside').style.display = 'none';
+        }
+    });
+
+    // 1. CLOUD AUTH ACTIONS
     function registerNurse() {
         const name = document.getElementById('reg-name').value;
         const email = document.getElementById('reg-email').value;
@@ -190,7 +208,6 @@
                     localStorage.setItem('nurse_user', name);
                     localStorage.setItem('nurse_id', nurseID);
                     alert("Account Created! Your Nurse ID is " + nurseID);
-                    checkLogin();
                 });
             }).catch((error) => alert(error.message));
     }
@@ -207,7 +224,6 @@
                 if (doc.exists) {
                     localStorage.setItem('nurse_user', doc.data().name);
                     localStorage.setItem('nurse_id', doc.data().nurseID);
-                    checkLogin();
                 }
             }).catch((error) => alert(error.message));
     }
@@ -219,18 +235,23 @@
         }
     }
 
-    // 2. CORE UI LOGIC
-    function checkLogin() {
-        const id = localStorage.getItem('nurse_id');
-        const user = localStorage.getItem('nurse_user');
-        if(id && user) {
-            document.getElementById('login-stage').style.display = 'none';
-            document.getElementById('category-stage').style.display = 'block';
-            document.getElementById('leaderboard-aside').style.display = 'block';
-            document.getElementById('welcome-text').innerText = `Welcome, Nurse ${user.split(' ')[0]}!`;
-            document.getElementById('display-nurse-id').innerText = id;
-            updateSetCounts();
-            if (typeof displayLeaderboard === 'function') displayLeaderboard();
+    // 2. UI FUNCTIONS
+    function loadSets(category) {
+        if (typeof quizData === 'undefined' || !quizData[category]) {
+            alert("Error: Quiz data loading. Please wait a second.");
+            return;
+        }
+        document.getElementById('category-stage').style.display = 'none';
+        document.getElementById('set-stage').style.display = 'block';
+        document.getElementById('selected-category-title').innerText = category + " Sets";
+        
+        const setList = document.getElementById('set-list');
+        setList.innerHTML = '';
+        
+        const setsAvailable = Object.keys(quizData[category]).length;
+        for(let i=1; i<=setsAvailable; i++) {
+            // FIXED MAPPING: We send 'Set 1' instead of just 1 to match quiz-data.js keys
+            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', 'Set ${i}')">Set ${i}</button>`;
         }
     }
 
@@ -243,22 +264,6 @@
                 element.innerText = `${Object.keys(quizData[cat]).length} Verified Sets`;
             }
         });
-    }
-
-    function loadSets(category) {
-        if (typeof quizData === 'undefined' || !quizData[category]) {
-            alert("Error: Quiz data not loaded yet. Please refresh.");
-            return;
-        }
-        document.getElementById('category-stage').style.display = 'none';
-        document.getElementById('set-stage').style.display = 'block';
-        document.getElementById('selected-category-title').innerText = category + " Sets";
-        const setList = document.getElementById('set-list');
-        setList.innerHTML = '';
-        const setsAvailable = Object.keys(quizData[category]).length;
-        for(let i=1; i<=setsAvailable; i++) {
-            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', ${i})">Set ${i} (Q ${((i-1)*20)+1}-${i*20})</button>`;
-        }
     }
 
     function backToCategories() {
@@ -269,55 +274,9 @@
     function logout() { auth.signOut().then(() => { localStorage.clear(); location.reload(); }); }
     function resetAllProgress() { if(confirm("Erase all scores and ID?")) { localStorage.clear(); location.reload(); } }
 
-    window.onload = checkLogin;
-</script>
-<script src="quiz-data.js"></script>
-
-<script>
-    // 🔐 AUTH LISTENERS
-    auth.onAuthStateChanged((user) => {
-        if (user) {
-            document.getElementById('login-stage').style.display = 'none';
-            document.getElementById('category-stage').style.display = 'block';
-            document.getElementById('leaderboard-aside').style.display = 'block';
-            const name = localStorage.getItem('nurse_user') || "Nurse";
-            document.getElementById('welcome-text').innerText = `Welcome, Nurse ${name.split(' ')[0]}!`;
-            document.getElementById('display-nurse-id').innerText = localStorage.getItem('nurse_id') || "NX-Cloud";
-            updateSetCounts();
-            if (typeof displayLeaderboard === 'function') displayLeaderboard();
-        } else {
-            document.getElementById('login-stage').style.display = 'block';
-            document.getElementById('category-stage').style.display = 'none';
-        }
-    });
-
-    // 🛠️ UI FUNCTIONS
-    function loadSets(category) {
-        if (typeof quizData === 'undefined') return alert("Data loading...");
-        document.getElementById('category-stage').style.display = 'none';
-        document.getElementById('set-stage').style.display = 'block';
-        document.getElementById('selected-category-title').innerText = category + " Sets";
-        const setList = document.getElementById('set-list');
-        setList.innerHTML = '';
-        const setsAvailable = Object.keys(quizData[category]).length;
-        for(let i=1; i<=setsAvailable; i++) {
-            setList.innerHTML += `<button class="option-btn" onclick="startQuiz('${category}', ${i})">Set ${i}</button>`;
-        }
-    }
-    function updateSetCounts() {
-        const categories = ['Med-Surg', 'Obstetrics', 'Paediatrics', 'Public Health', 'Psychiatry', 'Ward-Management'];
-        categories.forEach(cat => {
-            const id = cat.toLowerCase().replace(/[^a-z]/g, '') + '-count';
-            const element = document.getElementById(id);
-            if(typeof quizData !== 'undefined' && quizData[cat]) {
-                element.innerText = `${Object.keys(quizData[cat]).length} Verified Sets`;
-            }
-        });
-    }
-    function backToCategories() {
-        document.getElementById('set-stage').style.display = 'none';
-        document.getElementById('category-stage').style.display = 'block';
-    }
 </script>
 
 <script src="quiz-logic.js"></script>
+
+</body>
+</html>
